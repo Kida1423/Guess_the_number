@@ -1,10 +1,12 @@
 function mainMenu(){
     while(true){
-        const choose=prompt("Выберите режим игры:\n1. Угадай число\n2. Компьютер угадывает число\nВведите 1 или 2:");
+        const choose=prompt("Выберите режим игры:\n1. Компьютер угадывает число\n2. Пользователь угадывает число\n3. Игра по очереди\n Введите 1, 2 или 3:");
         if(choose==1){
-            game();
+            gameUser();
         }else if(choose==2){
             gameComputer();
+        }else if(choose==3){
+            round();
         }else{
             alert("Некорректный выбор. Пожалуйста, введите 1 или 2.");
             continue 
@@ -37,6 +39,7 @@ function gameComputer(){
             count--;
         }
     }
+    return count;
 } 
 function getUserInput(){
         let input;
@@ -54,11 +57,11 @@ function checkNum(userGuess,numberToGuess){
         return "меньше"
     }else if(userGuess<numberToGuess){
         return "больше"
-    }else{
+    }else if(userGuess===numberToGuess){
         return "угадал"
     }
 }
-function game(){
+function gameUser(){
     const numberToGuess=Math.floor(Math.random()*100)+1;
     let count=0;
     let flag=true;
@@ -72,5 +75,32 @@ function game(){
         }
     }
     alert(`Количество шагов ${count}`);
+    return count;
+}
+function round(){
+    let rounds=prompt("Количетсво раундов от 1 до 10: ");
+    rounds=isNaN(rounds)?3:Math.max(3,Math.min(rounds,10));
+    let userWins=0;
+    let computerWins=0;
+    for(let round=1;round<=rounds;round++){
+        alert(`Количетсво раундов ${rounds}`);
+        alert("Этап 1: Вы загадываете число, а компьютер попытается его угадать.");
+        const userSteps=gameUser();
+        alert("этап 2: Компьютер загадывает число, а вы попытаетесь его угадать.");
+        const computerSteps=gameComputer();
+        if(computerSteps>userSteps){
+            userWins++;
+        }else if(computerSteps<userSteps){
+            computerWins++;
+        }else{
+            alert(`Раунд ${round} закончился вничью`);
+        }
+
+    }
+    if(userWins>computerWins){
+        alert(`Вы выиграли ${userWins}, компьютер выиграл ${computerWins}. Поздравлюям, вы победили!`)
+    }else if(userWins<computerWins){
+        alert(`Вы выиграли ${userWins}, компьютер выиграл ${computerWins}. Компьютер победил`)
+    }
 }
 mainMenu();    
