@@ -4,7 +4,7 @@ function mainMenu(){
         if(choose==1){
             chooseDifficultyLevel();
         }else if(choose==2){
-            gameComputer();
+            gameUser()
         }else if(choose==3){
             round();
         }else{
@@ -93,33 +93,19 @@ function checkNum(userGuess,numberToGuess){
     }
 }
 function gameUser(difficulty){
-    alert("Загадайте число от 1 до 100");
-    let min=1;
-    let max=100;
+    const numberToGuess=Math.floor(Math.random()*100)+1;
     let count=0;
-    let flag=false;
-    while(!flag){
-        let guess;
-        if (difficulty==="easy") {
-            guess=Math.floor(Math.random()*(max-min+1))+min;
-        } else if(difficulty==="hard"){
-            guess=goldenSectionGuess(min,max,(min+max)/2);
-        }
+    let flag=true;
+    while(flag){
+        const userGuessNumber=getUserInput();
         count++;
-        const userFeedback=prompt(`Это ${guess}? (больше/меньше/угадал)`);
-        if(userFeedback.toLowerCase()==="угадал"){
-            flag=true;
-            alert("Компьютер угадал!");
-        }else if(userFeedback.toLowerCase()==="больше"){
-            min=guess+1;
-        }else if(userFeedback.toLowerCase()==="меньше") {
-            max=guess-1;
-        } else{
-            alert("Некорректный ввод. Пожалуйста, введите 'больше', 'меньше' или 'угадал'.");
-            count--;
+        let result=checkNum(userGuessNumber,numberToGuess);
+        alert(result);
+        if(result==="угадал"){
+            flag=false;
         }
     }
-    alert(`Компьютер угадал за ${count} шагов`);
+    alert(`Количество шагов ${count}`);
     return count;
 }
 function round(){
@@ -130,14 +116,14 @@ function round(){
     for(let round=1;round<=rounds;round++){
         alert(`Количетсво раундов ${rounds}`);
         alert("Этап 1: Вы загадываете число, а компьютер попытается его угадать.");
-        const userSteps=gameUser();
-        alert("этап 2: Компьютер загадывает число, а вы попытаетесь его угадать.");
         const computerSteps=gameComputer();
+        alert("этап 2: Компьютер загадывает число, а вы попытаетесь его угадать.");
+        const userSteps=gameUser();
         if(computerSteps>userSteps){
             userWins++;
         }else if(computerSteps<userSteps){
             computerWins++;
-        }else{
+        }else if(computerSteps===userSteps){
             alert(`Раунд ${round} закончился вничью`);
         }
     }
